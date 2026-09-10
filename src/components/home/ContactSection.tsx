@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useContact } from "@/components/contact/ContactContext";
 import { LOCAL_ASSETS } from "@/lib/assets";
 import type { SiteSettings } from "@/types/project";
 
@@ -8,6 +11,7 @@ type ContactSectionProps = {
 
 export function ContactSection({ settings }: ContactSectionProps) {
   const { email, telegram, discord } = settings;
+  const { openContact } = useContact();
 
   return (
     <section id="contact" className="relative mt-6 scroll-mt-20">
@@ -77,12 +81,13 @@ export function ContactSection({ settings }: ContactSectionProps) {
               <div>
                 <dt className="inline font-semibold">Email: </dt>
                 <dd className="inline">
-                  <a
-                    href={`mailto:${email}`}
+                  <button
+                    type="button"
+                    onClick={openContact}
                     className="underline-offset-2 hover:underline"
                   >
                     {email}
-                  </a>
+                  </button>
                 </dd>
               </div>
               {telegram && (
@@ -98,12 +103,6 @@ export function ContactSection({ settings }: ContactSectionProps) {
                       {telegram}
                     </a>
                   </dd>
-                </div>
-              )}
-              {discord && (
-                <div>
-                  <dt className="inline font-semibold">Discord: </dt>
-                  <dd className="inline">{discord}</dd>
                 </div>
               )}
             </dl>

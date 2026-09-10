@@ -3,14 +3,14 @@
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { useContact } from "@/components/contact/ContactContext";
 import { LOCAL_ASSETS } from "@/lib/assets";
+import { DEFAULT_CASE_STUDY } from "@/lib/sanity/caseStudy";
 import { urlFor } from "@/lib/sanity/image";
 import type { Project, SiteSettings } from "@/types/project";
 
 const DEFAULT_SUMMARY =
   "We are a creative design studio crafting distinctive brand identities that cut through noise, command attention, and endure. From strategy to execution, we transform ideas into powerful visual systems that connect, resonate, and scale.";
-
-const DEFAULT_CASE_STUDY = "/assets/case-studies/freeze-frame-landing.png";
 
 type ProjectModalProps = {
   project: Project;
@@ -34,6 +34,7 @@ export function ProjectModal({
   onClose,
   onSelect,
 }: ProjectModalProps) {
+  const { openContact } = useContact();
   const scrollRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
@@ -76,7 +77,12 @@ export function ProjectModal({
 
   const liveUrl = project.url ?? "https://www.axoper.com/";
   const summary = project.summary ?? DEFAULT_SUMMARY;
-  const caseStudySrc = project.caseStudySrc ?? DEFAULT_CASE_STUDY;
+  const caseStudySrcs =
+    project.caseStudySrcs?.length
+      ? project.caseStudySrcs
+      : project.caseStudySrc
+        ? [project.caseStudySrc]
+        : [DEFAULT_CASE_STUDY];
   const related = projects.filter((item) => item._id !== project._id);
 
   if (typeof document === "undefined") return null;
@@ -144,21 +150,33 @@ export function ProjectModal({
             </p>
           </header>
 
-          <div className="relative w-full bg-white">
-            {/* Serve original pixels — no Next.js optimizer downscale */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={caseStudySrc}
-              alt={
-                project.caseStudyImage?.alt ??
-                `${project.title} landing page`
-              }
-              className="mx-auto block h-auto w-full"
-              decoding="async"
-              loading="eager"
-              draggable={false}
-              style={{ imageRendering: "auto" }}
-            />
+          <div className="relative flex w-full flex-col gap-0 bg-white leading-[0]">
+            {/* Stacked full-bleed screenshots — scroll continuously as one landing page */}
+            {caseStudySrcs.map((src, index) => {
+              const sanityImage =
+                project.caseStudyImages?.[index] ??
+                (index === 0 ? project.caseStudyImage : undefined);
+              const alt =
+                sanityImage?.alt ??
+                `${project.title} landing page${
+                  caseStudySrcs.length > 1 ? ` · part ${index + 1}` : ""
+                }`;
+
+              return (
+                // Serve original pixels — no Next.js optimizer downscale
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  key={sanityImage?._key ?? `${project._id}-landing-${index}`}
+                  src={src}
+                  alt={alt}
+                  className="m-0 block h-auto w-full max-w-none p-0"
+                  decoding="async"
+                  loading={index === 0 ? "eager" : "lazy"}
+                  draggable={false}
+                  style={{ imageRendering: "auto", verticalAlign: "top" }}
+                />
+              );
+            })}
           </div>
 
           <footer className="border-0 bg-background px-4 pb-10 pt-12 text-center sm:px-6 sm:pb-12 sm:pt-14">
@@ -172,20 +190,22 @@ export function ProjectModal({
               />
             </div>
 
-            <a
-              href={`mailto:${settings.email}`}
+            <button
+              type="button"
+              onClick={openContact}
               className="mt-5 inline-block text-base font-medium text-accent transition hover:text-accent-soft sm:text-lg"
             >
               {settings.name}
-            </a>
+            </button>
 
             <div className="mt-5">
-              <a
-                href={`mailto:${settings.email}`}
+              <button
+                type="button"
+                onClick={openContact}
                 className="inline-flex rounded-md bg-accent px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-soft"
               >
                 Get in touch
-              </a>
+              </button>
             </div>
 
             <div className="relative mx-auto mt-10 max-w-4xl">

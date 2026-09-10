@@ -2,14 +2,12 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { useContact } from "@/components/contact/ContactContext";
 import { LOCAL_ASSETS } from "@/lib/assets";
 
-type FloatingContactProps = {
-  email: string;
-};
-
-export function FloatingContact({ email }: FloatingContactProps) {
+export function FloatingContact() {
   const [visible, setVisible] = useState(true);
+  const { openContact } = useContact();
 
   if (!visible) return null;
 
@@ -57,12 +55,13 @@ export function FloatingContact({ email }: FloatingContactProps) {
               <p className="text-[12px] font-medium leading-tight text-muted sm:text-[13px]">
                 Available for new projects
               </p>
-              <a
-                href={`mailto:${email}`}
+              <button
+                type="button"
+                onClick={openContact}
                 className="mt-1.5 inline-flex rounded-lg bg-accent px-3.5 py-1.5 text-[12px] font-semibold text-white transition hover:bg-accent-soft sm:text-[13px]"
               >
                 Get in touch
-              </a>
+              </button>
             </div>
           </div>
         </div>

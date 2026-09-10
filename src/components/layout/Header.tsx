@@ -3,11 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useContact } from "@/components/contact/ContactContext";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { LOCAL_ASSETS, NAV_LINKS } from "@/lib/assets";
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const { openContact } = useContact();
 
   return (
     <header className="absolute inset-x-0 top-0 z-50">
@@ -38,12 +40,13 @@ export function Header() {
         <div className="flex items-center justify-end gap-2 sm:gap-3">
           <ThemeToggle />
 
-          <a
-            href="#contact"
+          <button
+            type="button"
+            onClick={openContact}
             className="hidden rounded-lg bg-accent px-5 py-2.5 text-[15px] font-semibold text-white transition hover:bg-accent-soft md:inline-flex"
           >
             Get in touch
-          </a>
+          </button>
 
           <button
             type="button"
@@ -81,13 +84,16 @@ export function Header() {
                 {link.label}
               </a>
             ))}
-            <a
-              href="#contact"
-              onClick={() => setOpen(false)}
+            <button
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                openContact();
+              }}
               className="mt-1 rounded-lg bg-accent px-3 py-2.5 text-center text-sm font-semibold text-white"
             >
               Get in touch
-            </a>
+            </button>
           </nav>
         </div>
       )}

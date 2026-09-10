@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
 import { LOCAL_ASSETS } from "@/lib/assets";
+import type { ResolvedHeroMockups } from "@/lib/sanity/heroImages";
 import type { SiteSettings } from "@/types/project";
 
 type HeroProps = {
@@ -9,6 +10,7 @@ type HeroProps = {
 
 type MockupProps = {
   src: string;
+  alt?: string;
   width: number;
   height: number;
   delay?: 0 | 1 | 2 | 3;
@@ -19,6 +21,7 @@ type MockupProps = {
 
 function HeroMockup({
   src,
+  alt = "",
   width,
   height,
   delay = 0,
@@ -36,7 +39,7 @@ function HeroMockup({
           <div className="hero-mockup">
             <Image
               src={src}
-              alt=""
+              alt={alt}
               width={width}
               height={height}
               className="h-auto w-full"
@@ -122,6 +125,25 @@ function ScrollCue() {
   );
 }
 
+const FALLBACK_HERO: ResolvedHeroMockups = {
+  topLeft: {
+    src: LOCAL_ASSETS.hero.topLeft,
+    alt: "Hero top-left mockup",
+  },
+  topRight: {
+    src: LOCAL_ASSETS.hero.topRight,
+    alt: "Hero top-right mockup",
+  },
+  bottomLeft: {
+    src: LOCAL_ASSETS.hero.bottomLeft,
+    alt: "Hero bottom-left mockup",
+  },
+  bottomRight: {
+    src: LOCAL_ASSETS.hero.bottomRight,
+    alt: "Hero bottom-right mockup",
+  },
+};
+
 export function Hero({ settings }: HeroProps) {
   const {
     heroHeadline,
@@ -131,6 +153,7 @@ export function Hero({ settings }: HeroProps) {
     name,
     location,
     availability,
+    heroMockups = FALLBACK_HERO,
   } = settings;
 
   const badgeLines = (categoryBadge ?? "300+ category").trim().split(/\s+/);
@@ -143,18 +166,19 @@ export function Hero({ settings }: HeroProps) {
   return (
     <section
       id="home"
-      className="relative overflow-hidden px-4 pb-16 pt-28 sm:px-6 lg:px-3 lg:pb-20 lg:pt-28 xl:px-8 xl:pb-24 xl:pt-32"
+      className="relative overflow-hidden px-4 pb-16 pt-28 sm:px-6 lg:px-1 lg:pb-20 lg:pt-28 xl:px-3 xl:pb-24 xl:pt-32 2xl:px-4"
     >
       <div className="glow-blob left-1/2 top-20 h-[30rem] w-[30rem] -translate-x-1/2 opacity-40" />
 
-      <div className="relative z-10 mx-auto max-w-7xl">
-        {/* lg: slightly smaller side images, larger center text */}
-        <div className="hidden items-center lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(0,19.5rem)_minmax(0,1.05fr)] lg:gap-3 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,26rem)_minmax(0,0.95fr)] xl:gap-8 2xl:gap-12">
+      <div className="relative z-10 mx-auto max-w-[92rem]">
+        {/* Side columns stretch farther toward the viewport edges */}
+        <div className="hidden items-center lg:grid lg:grid-cols-[minmax(0,1.25fr)_minmax(0,18.5rem)_minmax(0,1.25fr)] lg:gap-2 xl:grid-cols-[minmax(0,1.15fr)_minmax(0,24rem)_minmax(0,1.15fr)] xl:gap-6 2xl:grid-cols-[minmax(0,1.2fr)_minmax(0,25rem)_minmax(0,1.2fr)] 2xl:gap-8">
           {/* Left mockups */}
           <div className="flex flex-col justify-center gap-5 self-stretch py-2 xl:gap-10 xl:py-6">
-            <div className="relative ml-auto w-[88%] max-w-[18rem] xl:w-full xl:max-w-[19.5rem] 2xl:max-w-[21rem]">
+            <div className="relative w-[94%] max-w-[20rem] xl:w-full xl:max-w-[22rem] 2xl:max-w-[24rem]">
               <HeroMockup
-                src={LOCAL_ASSETS.hero.topLeft}
+                src={heroMockups.topLeft.src}
+                alt={heroMockups.topLeft.alt}
                 width={498}
                 height={332}
                 delay={0}
@@ -162,11 +186,12 @@ export function Hero({ settings }: HeroProps) {
               />
             </div>
             <div
-              style={{ marginRight: "-30px" }}
-              className="relative ml-auto w-[82%] max-w-[16.5rem] xl:w-[94%] xl:max-w-[18.5rem] 2xl:max-w-[20rem]"
+              style={{ marginLeft: "50px", marginRight: "-36px" }}
+              className="relative w-[88%] max-w-[18.5rem] xl:w-[96%] xl:max-w-[21rem] 2xl:max-w-[23rem]"
             >
               <HeroMockup
-                src={LOCAL_ASSETS.hero.bottomLeft}
+                src={heroMockups.bottomLeft.src}
+                alt={heroMockups.bottomLeft.alt}
                 width={498}
                 height={332}
                 delay={2}
@@ -179,9 +204,9 @@ export function Hero({ settings }: HeroProps) {
             <Image
               src={LOCAL_ASSETS.logo}
               alt=""
-              width={64}
-              height={64}
-              className="logo-mark mb-4 h-11 w-11 object-contain xl:mb-6 xl:h-14 xl:w-14"
+              width={125}
+              height={125}
+              className="logo-mark mb-4 h-30 w-30 object-contain xl:mb-6 xl:h-30 xl:w-30"
               priority
             />
 
@@ -213,9 +238,10 @@ export function Hero({ settings }: HeroProps) {
 
           {/* Right mockups */}
           <div className="flex flex-col justify-center gap-5 self-stretch py-2 xl:gap-10 xl:py-6">
-            <div className="relative mr-auto w-[88%] max-w-[18rem] xl:w-full xl:max-w-[19.5rem] 2xl:max-w-[21rem]">
+            <div className="relative ml-auto w-[94%] max-w-[20rem] xl:w-full xl:max-w-[22rem] 2xl:max-w-[24rem]">
               <HeroMockup
-                src={LOCAL_ASSETS.hero.topRight}
+                src={heroMockups.topRight.src}
+                alt={heroMockups.topRight.alt}
                 width={498}
                 height={332}
                 delay={1}
@@ -223,11 +249,12 @@ export function Hero({ settings }: HeroProps) {
               />
             </div>
             <div
-              style={{ marginLeft: "-30px" }}
-              className="relative mr-auto w-[82%] max-w-[16.5rem] xl:w-[94%] xl:max-w-[18.5rem] 2xl:max-w-[20rem]"
+              style={{ marginLeft: "50px", marginRight: "-12px" }}
+              className="relative ml-auto w-[88%] max-w-[18.5rem] xl:w-[96%] xl:max-w-[21rem] 2xl:max-w-[23rem]"
             >
               <HeroMockup
-                src={LOCAL_ASSETS.hero.bottomRight}
+                src={heroMockups.bottomRight.src}
+                alt={heroMockups.bottomRight.alt}
                 width={499}
                 height={332}
                 delay={3}
@@ -248,9 +275,9 @@ export function Hero({ settings }: HeroProps) {
             <Image
               src={LOCAL_ASSETS.logo}
               alt=""
-              width={106}
-              height={106}
-              className="logo-mark mx-auto mb-5 h-12 w-12 object-contain"
+              width={125}
+              height={125}
+              className="logo-mark mx-auto mb-5 h-20 w-20 object-contain"
               priority
             />
             <h1 className="text-[1.85rem] font-bold leading-[1.2] tracking-tight text-foreground sm:text-4xl">
@@ -276,26 +303,30 @@ export function Hero({ settings }: HeroProps) {
 
           <div className="mt-10 grid grid-cols-2 gap-4">
             <HeroMockup
-              src={LOCAL_ASSETS.hero.topLeft}
+              src={heroMockups.topLeft.src}
+              alt={heroMockups.topLeft.alt}
               width={498}
               height={332}
               delay={0}
             />
             <HeroMockup
-              src={LOCAL_ASSETS.hero.topRight}
+              src={heroMockups.topRight.src}
+              alt={heroMockups.topRight.alt}
               width={498}
               height={332}
               delay={1}
             />
             <HeroMockup
-              src={LOCAL_ASSETS.hero.bottomLeft}
+              src={heroMockups.bottomLeft.src}
+              alt={heroMockups.bottomLeft.alt}
               width={498}
               height={332}
               delay={2}
             />
             <div className="relative">
               <HeroMockup
-                src={LOCAL_ASSETS.hero.bottomRight}
+                src={heroMockups.bottomRight.src}
+                alt={heroMockups.bottomRight.alt}
                 width={499}
                 height={332}
                 delay={3}

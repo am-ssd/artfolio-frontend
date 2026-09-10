@@ -8,7 +8,23 @@ export const SITE_SETTINGS_QUERY = `*[_type == "siteSettings"][0]{
   heroHeadline,
   heroHighlight,
   heroSubtext,
-  categoryBadge
+  categoryBadge,
+  heroTopLeft{
+    ...,
+    alt
+  },
+  heroTopRight{
+    ...,
+    alt
+  },
+  heroBottomLeft{
+    ...,
+    alt
+  },
+  heroBottomRight{
+    ...,
+    alt
+  }
 }`;
 
 export const PROJECTS_QUERY = `*[_type == "project" && defined(slug.current)] | order(order asc, publishedAt desc) {
@@ -16,13 +32,34 @@ export const PROJECTS_QUERY = `*[_type == "project" && defined(slug.current)] | 
   title,
   "slug": slug.current,
   category,
+  "categoryId": category._ref,
+  "categorySlug": category->slug.current,
+  "categoryTitle": category->title,
   thumbnail,
   summary,
+  caseStudyImages[]{
+    _key,
+    ...,
+    alt
+  },
   caseStudyImage{
     ...,
     alt
   },
   url,
   publishedAt,
+  order
+}`;
+
+export const CATEGORIES_QUERY = `*[_type == "category"] | order(order asc, title asc) {
+  _id,
+  title,
+  "slug": coalesce(slug.current, _id),
+  description,
+  backgroundImage{
+    ...,
+    alt,
+    "url": asset->url
+  },
   order
 }`;
