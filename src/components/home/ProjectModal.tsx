@@ -6,7 +6,7 @@ import { createPortal } from "react-dom";
 import { useContact } from "@/components/contact/ContactContext";
 import { LOCAL_ASSETS } from "@/lib/assets";
 import { DEFAULT_CASE_STUDY } from "@/lib/sanity/caseStudy";
-import { urlFor } from "@/lib/sanity/image";
+import { urlForOrNull } from "@/lib/sanity/image";
 import type { Project, SiteSettings } from "@/types/project";
 
 const DEFAULT_SUMMARY =
@@ -21,9 +21,9 @@ type ProjectModalProps = {
 };
 
 function projectThumb(project: Project) {
-  const sanityUrl = project.thumbnail
-    ? urlFor(project.thumbnail)?.width(640).height(480).url()
-    : null;
+  const sanityUrl = urlForOrNull(project.thumbnail, (b) =>
+    b.width(640).height(480).url(),
+  );
   return sanityUrl ?? project.imageSrc ?? null;
 }
 

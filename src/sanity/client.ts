@@ -11,7 +11,7 @@ const previewToken =
 /**
  * Homepage content client.
  * - Always hits the API directly (no CDN) so category images update immediately.
- * - With a token, uses previewDrafts so unpublished Studio edits (incl. new
+ * - With a token, uses `drafts` perspective so unpublished Studio edits (incl. new
  *   background images) appear on the site before you click Publish.
  */
 export const client = createClient({
@@ -20,7 +20,7 @@ export const client = createClient({
   apiVersion,
   useCdn: false,
   token: previewToken || undefined,
-  perspective: previewToken ? "previewDrafts" : "published",
+  perspective: previewToken ? "drafts" : "published",
   stega: false,
 });
 

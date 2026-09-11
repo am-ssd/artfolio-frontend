@@ -1,5 +1,5 @@
 import type { Category, Project, SanityImage } from "@/types/project";
-import { urlFor } from "@/lib/sanity/image";
+import { urlForOrNull } from "@/lib/sanity/image";
 
 const LEGACY_CATEGORY_META: Record<
   string,
@@ -51,13 +51,9 @@ export function resolveCategoryBackgroundSrc(
 ): string | null {
   const image = category.backgroundImage;
   if (hasImageAsset(image)) {
-    const built =
-      urlFor(image!)
-        ?.width(1600)
-        .height(1000)
-        .fit("crop")
-        .auto("format")
-        .url() ?? null;
+    const built = urlForOrNull(image, (b) =>
+      b.width(1600).height(1000).fit("crop").auto("format").url(),
+    );
     return built || image?.url || null;
   }
 
@@ -124,7 +120,7 @@ function synthesizeFromProjects(projects: Project[]): Category[] {
 }
 
 /**
- * Prefer CMS categories (including draft-backed ones when using previewDrafts).
+ * Prefer CMS categories (including draft-backed ones when using drafts perspective).
  * Never inject local demo collage images over real CMS data.
  */
 export function resolveCategories(

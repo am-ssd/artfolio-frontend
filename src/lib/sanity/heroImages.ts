@@ -1,5 +1,5 @@
 import { LOCAL_ASSETS } from "@/lib/assets";
-import { urlFor } from "@/lib/sanity/image";
+import { urlForOrNull } from "@/lib/sanity/image";
 import type { HeroMockupUrls, SanityImage, SiteSettings } from "@/types/project";
 
 export type ResolvedHeroMockups = {
@@ -14,10 +14,9 @@ function resolveHeroMockup(
   fallbackSrc: string,
   fallbackAlt: string,
 ) {
-  const fromSanity =
-    image?.asset?._ref
-      ? urlFor(image)?.width(996).quality(90).fit("max").url()
-      : null;
+  const fromSanity = urlForOrNull(image, (b) =>
+    b.width(996).quality(90).fit("max").url(),
+  );
 
   return {
     src: fromSanity ?? fallbackSrc,

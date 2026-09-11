@@ -28,6 +28,7 @@ export function ProjectGrid({
 
   const categoryCards = useMemo(() => {
     return (categories ?? []).map((category) => {
+      console.log(category)
       const items = source.filter(
         (project) => project.categoryId === category._id,
       );

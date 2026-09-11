@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { urlFor } from "@/lib/sanity/image";
+import { urlForOrNull } from "@/lib/sanity/image";
 import type { Project } from "@/types/project";
 
 type ProjectCardProps = {
@@ -8,9 +8,9 @@ type ProjectCardProps = {
 };
 
 export function ProjectCard({ project, onOpen }: ProjectCardProps) {
-  const sanityUrl = project.thumbnail
-    ? urlFor(project.thumbnail)?.width(900).height(675).url()
-    : null;
+  const sanityUrl = urlForOrNull(project.thumbnail, (b) =>
+    b.width(900).height(675).url(),
+  );
   const imageUrl = sanityUrl ?? project.imageSrc ?? null;
 
   return (
