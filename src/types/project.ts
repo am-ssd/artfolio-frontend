@@ -77,6 +77,8 @@ export type SiteSettings = {
   heroTopRight?: SanityImage | null;
   heroBottomLeft?: SanityImage | null;
   heroBottomRight?: SanityImage | null;
+  /** Contact section illustration */
+  contactImage?: SanityImage | null;
   /** Resolved hero mockup URLs (Sanity CDN or local fallbacks) */
   heroImages?: HeroMockupUrls;
   /** Resolved hero mockups with alt text */
@@ -86,4 +88,6 @@ export type SiteSettings = {
     bottomLeft: { src: string; alt: string };
     bottomRight: { src: string; alt: string };
   };
+  /** Resolved contact illustration (Sanity CDN or local fallback) */
+  contactIllustration?: { src: string; alt: string };
 };

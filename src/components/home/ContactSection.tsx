@@ -10,8 +10,12 @@ type ContactSectionProps = {
 };
 
 export function ContactSection({ settings }: ContactSectionProps) {
-  const { email, telegram, discord } = settings;
+  const { email, telegram } = settings;
   const { openContact } = useContact();
+  const illustration = settings.contactIllustration ?? {
+    src: LOCAL_ASSETS.contact,
+    alt: "Contact illustration",
+  };
 
   return (
     <section id="contact" className="relative mt-6 scroll-mt-20">
@@ -40,8 +44,8 @@ export function ContactSection({ settings }: ContactSectionProps) {
         <div className="relative z-10 mx-auto grid max-w-6xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:gap-20 lg:px-8">
           <div className="flex justify-center lg:justify-start">
             <Image
-              src={LOCAL_ASSETS.contact}
-              alt="Contact illustration"
+              src={illustration.src}
+              alt={illustration.alt}
               width={480}
               height={360}
               className="h-auto w-full max-w-lg object-contain drop-shadow-xl"

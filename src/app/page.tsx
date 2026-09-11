@@ -12,6 +12,7 @@ import {
   resolveCategories,
   resolveCategoryBackgroundSrc,
 } from "@/lib/sanity/categories";
+import { resolveContactIllustration } from "@/lib/sanity/contactImage";
 import { resolveHeroImages, resolveHeroMockups } from "@/lib/sanity/heroImages";
 import {
   CATEGORIES_QUERY,
@@ -71,6 +72,7 @@ export default async function HomePage() {
   };
   settings.heroMockups = resolveHeroMockups(settings);
   settings.heroImages = resolveHeroImages(settings);
+  settings.contactIllustration = resolveContactIllustration(settings);
 
   const normalizedProjects = (
     projectsResult.length ? projectsResult : LOCAL_DEMO_PROJECTS
